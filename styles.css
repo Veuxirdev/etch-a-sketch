@@ -1,3 +1,19 @@
-.blue {
-    color: blue;
+body{
+    box-sizing: border-box;
+}
+.grid-container{
+    border: lightseagreen 5px solid;
+    width: fit-content;
+}
+
+.line{
+    display: flex;
+    flex: 1;
+}
+
+
+.item{
+    width: 50px;
+    height: 50px;
+    flex-shrink: 1;
 }
