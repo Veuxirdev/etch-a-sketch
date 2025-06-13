@@ -1,5 +1,6 @@
+
 const GRID_WIDTH = 700;
-let initial = 10;
+let initialOpacity = 10;
 let isRainbow = false;
 const bodyHTML = document.querySelector("body");
 const appContainer = document.createElement("div");
@@ -36,10 +37,10 @@ toggleRainbowBtn.textContent = "Toggle Rainbow";
 toggleRainbowBtn.addEventListener("click", () =>{
     if(!isRainbow){
         isRainbow = true;
-        initial = 10;
+        initialOpacity = 10;
     } else{
         isRainbow = false;
-        initial = 10;
+        initialOpacity = 10;
     }
 })
 
@@ -53,15 +54,17 @@ function rdmColor(){
     return `rgb(${redVal} ${greenVal} ${blueVal})`;
 }
 
-function createDivInside(parentNode, iterator, size){
+// Grid code
+
+function createGridItem(parentNode, iterator, size){
     const div = document.createElement("div");
     div.classList = `gridItem-${iterator} item`;
     div.style.width=`${GRID_WIDTH / size}px`;
     div.style.height=`${GRID_WIDTH / size}px`;
     div.addEventListener("mouseover", (e)=>{
-        console.log(initial);
-        div.style.opacity = `${initial}%`;
-        initial < 100? initial += 10 : initial;
+        console.log(initialOpacity);
+        div.style.opacity = `${initialOpacity}%`;
+        initialOpacity < 100? initialOpacity += 10 : initialOpacity;
         div.style.backgroundColor = isRainbow? rdmColor(): "black";
     })
     
@@ -72,7 +75,7 @@ function createGridLine(parentNode, size, iterator){
     const div = document.createElement("div");
     div.classList = `gridLine-${iterator} line`;
     for(let i = 1; i <= size; i++){
-        createDivInside(div, i, size);
+        createGridItem(div, i, size);
     }
     parentNode.appendChild(div);
 }
