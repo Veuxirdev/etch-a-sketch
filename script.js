@@ -1,14 +1,68 @@
+const GRID_WIDTH = 700;
+let initial = 10;
+let isRainbow = false;
 const bodyHTML = document.querySelector("body");
-
 const appContainer = document.createElement("div");
 appContainer.classList = "main-container";
 
-function createDivInside(parentNode, iterator){
+const sizeChangerContainer = document.createElement("form");
+
+const input = document.createElement("input");
+input.setAttribute("type", "number");
+input.required = true;
+input.placeholder = "Min:16/Max:100";
+sizeChangerContainer.appendChild(input);
+
+const btn = document.createElement("button");
+btn.type = "submit";
+btn.textContent = "Set Pixel Quantity";
+btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const inputVal = Number(input.value);
+    if(inputVal && inputVal >= 16 && inputVal <= 100){
+        const oldGrid = document.querySelector(".grid-container");
+        appContainer.removeChild(oldGrid);
+        createGrid(inputVal);
+    } else {
+        alert("Please insert a value between 16 and 100");
+    }
+})
+sizeChangerContainer.appendChild(btn);
+
+appContainer.appendChild(sizeChangerContainer);
+
+const toggleRainbowBtn = document.createElement("button");
+toggleRainbowBtn.textContent = "Toggle Rainbow";
+toggleRainbowBtn.addEventListener("click", () =>{
+    if(!isRainbow){
+        isRainbow = true;
+        initial = 10;
+    } else{
+        isRainbow = false;
+        initial = 10;
+    }
+})
+
+appContainer.appendChild(toggleRainbowBtn);
+
+function rdmColor(){
+    const redVal = Math.floor((Math.random() * 255));
+    const greenVal = Math.floor((Math.random() * 255));
+    const blueVal = Math.floor((Math.random() * 255));
+
+    return `rgb(${redVal} ${greenVal} ${blueVal})`;
+}
+
+function createDivInside(parentNode, iterator, size){
     const div = document.createElement("div");
     div.classList = `gridItem-${iterator} item`;
-    
-    div.addEventListener("mousemove", (e)=>{
-        div.style.backgroundColor = "black";
+    div.style.width=`${GRID_WIDTH / size}px`;
+    div.style.height=`${GRID_WIDTH / size}px`;
+    div.addEventListener("mouseover", (e)=>{
+        console.log(initial);
+        div.style.opacity = `${initial}%`;
+        initial < 100? initial += 10 : initial;
+        div.style.backgroundColor = isRainbow? rdmColor(): "black";
     })
     
     parentNode.appendChild(div);
@@ -17,8 +71,8 @@ function createDivInside(parentNode, iterator){
 function createGridLine(parentNode, size, iterator){
     const div = document.createElement("div");
     div.classList = `gridLine-${iterator} line`;
-    for(let i = 1; i <= 16; i++){
-        createDivInside(div, i);
+    for(let i = 1; i <= size; i++){
+        createDivInside(div, i, size);
     }
     parentNode.appendChild(div);
 }
@@ -29,7 +83,7 @@ function createGrid(size = 16){
     for(let i = 1; i <= size; i++){
         createGridLine(div, size, i);
     }
-    appContainer.appendChild(div);
+     return appContainer.appendChild(div);
 }
 
 createGrid();
